@@ -2,6 +2,7 @@ package com.miryor.jawn.rest;
 
 import com.miryor.jawn.rest.health.TemplateHealthCheck;
 import com.miryor.jawn.rest.resources.HelloWorldResource;
+import com.miryor.jawn.rest.resources.HourlyForecastResource;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -32,6 +33,7 @@ public class JawnRestApplication extends Application<JawnRestConfiguration> {
             configuration.getDefaultName()
         );
         environment.jersey().register(resource);
+        environment.jersey().register( new HourlyForecastResource() );
         final TemplateHealthCheck healthCheck = 
             new TemplateHealthCheck(configuration.getTemplate());
         environment.healthChecks().register("template", healthCheck);
