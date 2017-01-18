@@ -954,8 +954,49 @@ public class WeatherJsonParserTest {
     public void testWunderground() throws Exception {
         WeatherJsonParser parser = new WundergroundWeatherJsonParser(WUNDERGROUND_JSON);
         List<HourlyForecast> list = parser.parseHourlyForecast();
-        assertEquals( list.size(), 36 );
-        HourlyForecast hf = list.get(0);
-        assertEquals(hf.getMonth(), 11);
+        assertEquals( 36, list.size() );
+        
+//        "\t\t\"FCTTIME\": {\n" +
+//        "\t\t\"hour\": \"21\",\"hour_padded\": \"21\",\"min\": \"00\",\"min_unpadded\": \"0\",\"sec\": \"0\",\"year\": \"2016\",\"mon\": \"11\",\"mon_padded\": \"11\",\"mon_abbrev\": \"Nov\",\"mday\": \"20\",\"mday_padded\": \"20\",\"yday\": \"324\",\"isdst\": \"0\",\"epoch\": \"1479704400\",\"pretty\": \"9:00 PM PST on November 20, 2016\",\"civil\": \"9:00 PM\",\"month_name\": \"November\",\"month_name_abbrev\": \"Nov\",\"weekday_name\": \"Sunday\",\"weekday_name_night\": \"Sunday Night\",\"weekday_name_abbrev\": \"Sun\",\"weekday_name_unlang\": \"Sunday\",\"weekday_name_night_unlang\": \"Sunday Night\",\"ampm\": \"PM\",\"tz\": \"\",\"age\": \"\",\"UTCDATE\": \"\"\n" +
+//        "\t\t},\n" +
+//        "\t\t\"temp\": {\"english\": \"56\", \"metric\": \"13\"},\n" +
+//        "\t\t\"dewpoint\": {\"english\": \"54\", \"metric\": \"12\"},\n" +
+//        "\t\t\"condition\": \"Chance of Rain\",\n" +
+//        "\t\t\"icon\": \"chancerain\",\n" +
+//        "\t\t\"icon_url\":\"http://icons.wxug.com/i/c/k/nt_chancerain.gif\",\n" +
+//        "\t\t\"fctcode\": \"12\",\n" +
+//        "\t\t\"sky\": \"47\",\n" +
+//        "\t\t\"wspd\": {\"english\": \"2\", \"metric\": \"3\"},\n" +
+//        "\t\t\"wdir\": {\"dir\": \"WNW\", \"degrees\": \"290\"},\n" +
+//        "\t\t\"wx\": \"Few Showers\",\n" +
+//        "\t\t\"uvi\": \"0\",\n" +
+//        "\t\t\"humidity\": \"92\",\n" +
+//        "\t\t\"windchill\": {\"english\": \"-9999\", \"metric\": \"-9999\"},\n" +
+//        "\t\t\"heatindex\": {\"english\": \"-9999\", \"metric\": \"-9999\"},\n" +
+//        "\t\t\"feelslike\": {\"english\": \"56\", \"metric\": \"13\"},\n" +
+//        "\t\t\"qpf\": {\"english\": \"0.0\", \"metric\": \"0\"},\n" +
+//        "\t\t\"snow\": {\"english\": \"0.0\", \"metric\": \"0\"},\n" +
+//        "\t\t\"pop\": \"30\",\n" +
+//        "\t\t\"mslp\": {\"english\": \"29.94\", \"metric\": \"1014\"}\n" +        
+        
+        HourlyForecast hf = list.get(1);
+        assertEquals(11, hf.getMonth());
+        assertEquals(56, hf.getTempF());
+        assertEquals(54, hf.getDewPointEnglish());
+        assertEquals("Chance of Rain", hf.getCondition());
+        assertEquals(47, hf.getSky());
+        assertEquals(2, hf.getWindSpeedEnglish());
+        assertEquals("WNW", hf.getWindDirection());
+        assertEquals(290, hf.getWindDegrees());
+        assertEquals("Few Showers", hf.getWx());
+        assertEquals(0, hf.getUvi());
+        assertEquals(92, hf.getHumidity());
+        assertEquals(-9999, hf.getWindChillEnglish());
+        assertEquals(-9999, hf.getHeatIndexEnglish());
+        assertEquals(0.0d, hf.getQpfEnglish(),0);
+        assertEquals(0.0, hf.getSnowEnglish(),0);
+        assertEquals(30, hf.getPop());
+        assertEquals(29.94, hf.getMslpEnglish(),0);
+        
     }
 }

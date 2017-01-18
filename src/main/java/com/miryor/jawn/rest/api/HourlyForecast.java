@@ -25,6 +25,27 @@ public class HourlyForecast {
     private int humidity;
     private long epoch;
 
+    private int dewPointEnglish;
+    private int dewPointMetric;
+    private int sky;
+    private int windSpeedEnglish;
+    private int windSpeedMetric;
+    private String windDirection;
+    private int windDegrees;
+    private String wx;
+    private int uvi;
+    private int windChillEnglish;
+    private int windChillMetric;
+    private int heatIndexEnglish;
+    private int heatIndexMetric;
+    private double qpfEnglish;
+    private int qpfMetric;
+    private double snowEnglish;
+    private int snowMetric;
+    private int pop;
+    private double mslpEnglish;
+    private int mslpMetric;
+
     @JsonProperty
     public long getEpoch() {
         return epoch;
@@ -169,6 +190,186 @@ public class HourlyForecast {
         this.humidity = humidity;
     }
     
+    @JsonProperty
+    public int getDewPointEnglish() {
+        return dewPointEnglish;
+    }
+
+    public void setDewPointEnglish(int dewPointEnglish) {
+        this.dewPointEnglish = dewPointEnglish;
+    }
+
+    @JsonProperty
+    public int getDewPointMetric() {
+        return dewPointMetric;
+    }
+
+    public void setDewPointMetric(int dewPointMetric) {
+        this.dewPointMetric = dewPointMetric;
+    }
+
+    @JsonProperty
+    public int getSky() {
+        return sky;
+    }
+
+    public void setSky(int sky) {
+        this.sky = sky;
+    }
+
+    @JsonProperty
+    public int getWindSpeedEnglish() {
+        return windSpeedEnglish;
+    }
+
+    public void setWindSpeedEnglish(int windSpeedEnglish) {
+        this.windSpeedEnglish = windSpeedEnglish;
+    }
+
+    @JsonProperty
+    public int getWindSpeedMetric() {
+        return windSpeedMetric;
+    }
+
+    public void setWindSpeedMetric(int windSpeedMetric) {
+        this.windSpeedMetric = windSpeedMetric;
+    }
+    
+    @JsonProperty
+    public String getWindDirection() {
+        return windDirection;
+    }
+
+    public void setWindDirection(String windDirection) {
+        this.windDirection = windDirection;
+    }
+
+    @JsonProperty
+    public int getWindDegrees() {
+        return windDegrees;
+    }
+
+    public void setWindDegrees(int windDegrees) {
+        this.windDegrees = windDegrees;
+    }
+
+    @JsonProperty
+    public String getWx() {
+        return wx;
+    }
+
+    public void setWx(String wx) {
+        this.wx = wx;
+    }
+
+    @JsonProperty
+    public int getUvi() {
+        return uvi;
+    }
+
+    public void setUvi(int uvi) {
+        this.uvi = uvi;
+    }
+
+    @JsonProperty
+    public int getWindChillEnglish() {
+        return windChillEnglish;
+    }
+
+    public void setWindChillEnglish(int windChillEnglish) {
+        this.windChillEnglish = windChillEnglish;
+    }
+
+    @JsonProperty
+    public int getWindChillMetric() {
+        return windChillMetric;
+    }
+
+    public void setWindChillMetric(int windChillMetric) {
+        this.windChillMetric = windChillMetric;
+    }
+
+    @JsonProperty
+    public int getHeatIndexEnglish() {
+        return heatIndexEnglish;
+    }
+
+    public void setHeatIndexEnglish(int heatIndexEnglish) {
+        this.heatIndexEnglish = heatIndexEnglish;
+    }
+
+    @JsonProperty
+    public int getHeatIndexMetric() {
+        return heatIndexMetric;
+    }
+
+    public void setHeatIndexMetric(int heatIndexMetric) {
+        this.heatIndexMetric = heatIndexMetric;
+    }
+
+    @JsonProperty
+    public double getQpfEnglish() {
+        return qpfEnglish;
+    }
+
+    public void setQpfEnglish(double qpfEnglish) {
+        this.qpfEnglish = qpfEnglish;
+    }
+
+    @JsonProperty
+    public int getQpfMetric() {
+        return qpfMetric;
+    }
+
+    public void setQpfMetric(int qpfMetric) {
+        this.qpfMetric = qpfMetric;
+    }
+
+    @JsonProperty
+    public double getSnowEnglish() {
+        return snowEnglish;
+    }
+
+    public void setSnowEnglish(double snowEnglish) {
+        this.snowEnglish = snowEnglish;
+    }
+
+    @JsonProperty
+    public int getSnowMetric() {
+        return snowMetric;
+    }
+
+    public void setSnowMetric(int snowMetric) {
+        this.snowMetric = snowMetric;
+    }
+
+    @JsonProperty
+    public int getPop() {
+        return pop;
+    }
+
+    public void setPop(int pop) {
+        this.pop = pop;
+    }
+
+    @JsonProperty
+    public double getMslpEnglish() {
+        return mslpEnglish;
+    }
+
+    public void setMslpEnglish(double mslpEnglish) {
+        this.mslpEnglish = mslpEnglish;
+    }
+
+    @JsonProperty
+    public int getMslpMetric() {
+        return mslpMetric;
+    }
+
+    public void setMslpMetric(int mslpMetric) {
+        this.mslpMetric = mslpMetric;
+    }
+    
     public HourlyForecast() {
     }
 
@@ -189,6 +390,28 @@ public class HourlyForecast {
         feelsLikeM = b.feelsLikeM;
         humidity = b.humidity;
         epoch = b.epoch;
+        
+        dewPointEnglish = b.dewPointEnglish;
+        dewPointMetric = b.dewPointMetric;
+        sky = b.sky;
+        windSpeedEnglish = b.windSpeedEnglish;
+        windSpeedMetric = b.windSpeedMetric;
+        windDirection = b.windDirection;
+        windDegrees = b.windDegrees;
+        wx = b.wx;
+        uvi = b.uvi;
+        windChillEnglish = b.windChillEnglish;
+        windChillMetric = b.windChillMetric;
+        heatIndexEnglish = b.heatIndexEnglish;
+        heatIndexMetric = b.heatIndexMetric;
+        qpfEnglish = b.qpfEnglish;
+        qpfMetric = b.qpfMetric;
+        snowEnglish = b.snowEnglish;
+        snowMetric = b.snowMetric;
+        pop = b.pop;
+        mslpEnglish = b.mslpEnglish;
+        mslpMetric = b.mslpMetric;        
+        
     }
 
     @Override
@@ -214,6 +437,27 @@ public class HourlyForecast {
         private int humidity;
         private long epoch;
 
+        private int dewPointEnglish;
+        private int dewPointMetric;
+        private int sky;
+        private int windSpeedEnglish;
+        private int windSpeedMetric;
+        private String windDirection;
+        private int windDegrees;
+        private String wx;
+        private int uvi;
+        private int windChillEnglish;
+        private int windChillMetric;
+        private int heatIndexEnglish;
+        private int heatIndexMetric;
+        private double qpfEnglish;
+        private int qpfMetric;
+        private double snowEnglish;
+        private int snowMetric;
+        private int pop;
+        private double mslpEnglish;
+        private int mslpMetric;   
+        
         public long getEpoch() {
             return epoch;
         }
@@ -282,6 +526,166 @@ public class HourlyForecast {
             this.humidity = humidity;
         }
 
+        public int getDewPointEnglish() {
+            return dewPointEnglish;
+        }
+
+        public void setDewPointEnglish(int dewPointEnglish) {
+            this.dewPointEnglish = dewPointEnglish;
+        }
+
+        public int getDewPointMetric() {
+            return dewPointMetric;
+        }
+
+        public void setDewPointMetric(int dewPointMetric) {
+            this.dewPointMetric = dewPointMetric;
+        }
+
+        public int getSky() {
+            return sky;
+        }
+
+        public void setSky(int sky) {
+            this.sky = sky;
+        }
+        
+        public int getWindSpeedEnglish() {
+            return windSpeedEnglish;
+        }
+
+        public void setWindSpeedEnglish(int windSpeedEnglish) {
+            this.windSpeedEnglish = windSpeedEnglish;
+        }
+
+        public int getWindSpeedMetric() {
+            return windSpeedMetric;
+        }
+
+        public void setWindSpeedMetric(int windSpeedMetric) {
+            this.windSpeedMetric = windSpeedMetric;
+        }
+
+        public String getWindDirection() {
+            return windDirection;
+        }
+
+        public void setWindDirection(String windDirection) {
+            this.windDirection = windDirection;
+        }
+
+        public int getWindDegrees() {
+            return windDegrees;
+        }
+
+        public void setWindDegrees(int windDegrees) {
+            this.windDegrees = windDegrees;
+        }
+
+        public String getWx() {
+            return wx;
+        }
+
+        public void setWx(String wx) {
+            this.wx = wx;
+        }
+
+        public int getUvi() {
+            return uvi;
+        }
+
+        public void setUvi(int uvi) {
+            this.uvi = uvi;
+        }
+
+        public int getWindChillEnglish() {
+            return windChillEnglish;
+        }
+
+        public void setWindChillEnglish(int windChillEnglish) {
+            this.windChillEnglish = windChillEnglish;
+        }
+
+        public int getWindChillMetric() {
+            return windChillMetric;
+        }
+
+        public void setWindChillMetric(int windChillMetric) {
+            this.windChillMetric = windChillMetric;
+        }
+
+        public int getHeatIndexEnglish() {
+            return heatIndexEnglish;
+        }
+
+        public void setHeatIndexEnglish(int heatIndexEnglish) {
+            this.heatIndexEnglish = heatIndexEnglish;
+        }
+
+        public int getHeatIndexMetric() {
+            return heatIndexMetric;
+        }
+
+        public void setHeatIndexMetric(int heatIndexMetric) {
+            this.heatIndexMetric = heatIndexMetric;
+        }
+
+        public double getQpfEnglish() {
+            return qpfEnglish;
+        }
+
+        public void setQpfEnglish(double qpfEnglish) {
+            this.qpfEnglish = qpfEnglish;
+        }
+
+        public int getQpfMetric() {
+            return qpfMetric;
+        }
+
+        public void setQpfMetric(int qpfMetric) {
+            this.qpfMetric = qpfMetric;
+        }
+
+        public double getSnowEnglish() {
+            return snowEnglish;
+        }
+
+        public void setSnowEnglish(double snowEnglish) {
+            this.snowEnglish = snowEnglish;
+        }
+
+        public int getSnowMetric() {
+            return snowMetric;
+        }
+
+        public void setSnowMetric(int snowMetric) {
+            this.snowMetric = snowMetric;
+        }
+        
+        public int getPop() {
+            return pop;
+        }
+
+        public void setPop(int pop) {
+            this.pop = pop;
+        }
+
+        public double getMslpEnglish() {
+            return mslpEnglish;
+        }
+
+        public void setMslpEnglish(double mslpEnglish) {
+            this.mslpEnglish = mslpEnglish;
+        }
+
+        public int getMslpMetric() {
+            return mslpMetric;
+        }
+
+        public void setMslpMetric(int mslpMetric) {
+            this.mslpMetric = mslpMetric;
+        }
+        
         public HourlyForecast build() {
             HourlyForecast f = new HourlyForecast(this);
             return f;

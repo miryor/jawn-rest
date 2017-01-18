@@ -89,6 +89,54 @@ public class WundergroundWeatherJsonParser implements WeatherJsonParser {
                     if ( parser.nextToken() == JsonToken.START_OBJECT )
                         parseTemp(parser,builder);
                 }
+                else if ( name.equals("dewpoint") ) {
+                    if ( parser.nextToken() == JsonToken.START_OBJECT )
+                        parseDewpoint(parser,builder);
+                }
+                else if ( name.equals("sky") ) {
+                    t = parser.nextToken();
+                    builder.setSky(parser.getValueAsInt());
+                }
+                else if ( name.equals("wspd") ) {
+                    if ( parser.nextToken() == JsonToken.START_OBJECT )
+                        parseWindSpeed(parser,builder);
+                }
+                else if ( name.equals("wdir") ) {
+                    if ( parser.nextToken() == JsonToken.START_OBJECT )
+                        parseWindDir(parser,builder);
+                }
+                else if ( name.equals("windchill") ) {
+                    if ( parser.nextToken() == JsonToken.START_OBJECT )
+                        parseWindChill(parser,builder);
+                }
+                else if ( name.equals("heatindex") ) {
+                    if ( parser.nextToken() == JsonToken.START_OBJECT )
+                        parseHeatIndex(parser,builder);
+                }
+                else if ( name.equals("qpf") ) {
+                    if ( parser.nextToken() == JsonToken.START_OBJECT )
+                        parseQpf(parser,builder);
+                }
+                else if ( name.equals("snow") ) {
+                    if ( parser.nextToken() == JsonToken.START_OBJECT )
+                        parseSnow(parser,builder);
+                }
+                else if ( name.equals("mslp") ) {
+                    if ( parser.nextToken() == JsonToken.START_OBJECT )
+                        parseMslp(parser,builder);
+                }
+                else if ( name.equals("wx") ) {
+                    t = parser.nextToken();
+                    builder.setWx(parser.getText());
+                }
+                else if ( name.equals("uvi") ) {
+                    t = parser.nextToken();
+                    builder.setUvi(parser.getValueAsInt());
+                }
+                else if ( name.equals("pop") ) {
+                    t = parser.nextToken();
+                    builder.setPop(parser.getValueAsInt());
+                }
                 else if ( name.equals("condition") ) {
                     t = parser.nextToken();
                     builder.setCondition(parser.getText());
@@ -159,10 +207,130 @@ public class WundergroundWeatherJsonParser implements WeatherJsonParser {
             String name = parser.getCurrentName();
             parser.nextToken();
             if ( name.equals("english") ) {
-                builder.setTempF(Integer.parseInt(parser.getText()));
+                builder.setTempF(parser.getValueAsInt());
             }
             else if ( name.equals("metric" ) ) {
-                builder.setTempM(Integer.parseInt(parser.getText()));
+                builder.setTempM(parser.getValueAsInt());
+            }
+        }
+    }
+
+    private void parseDewpoint(JsonParser parser, HourlyForecast.HourlyForecastBuilder builder) throws IOException {
+        JsonToken t;
+        while( ( t = parser.nextToken() ) != JsonToken.END_OBJECT ) {
+            if ( t != JsonToken.FIELD_NAME ) continue;
+            String name = parser.getCurrentName();
+            parser.nextToken();
+            if ( name.equals("english") ) {
+                builder.setDewPointEnglish(parser.getValueAsInt());
+            }
+            else if ( name.equals("metric" ) ) {
+                builder.setDewPointMetric(parser.getValueAsInt());
+            }
+        }
+    }
+
+    private void parseWindSpeed(JsonParser parser, HourlyForecast.HourlyForecastBuilder builder) throws IOException {
+        JsonToken t;
+        while( ( t = parser.nextToken() ) != JsonToken.END_OBJECT ) {
+            if ( t != JsonToken.FIELD_NAME ) continue;
+            String name = parser.getCurrentName();
+            parser.nextToken();
+            if ( name.equals("english") ) {
+                builder.setWindSpeedEnglish(parser.getValueAsInt());
+            }
+            else if ( name.equals("metric" ) ) {
+                builder.setWindSpeedMetric(parser.getValueAsInt());
+            }
+        }
+    }
+
+    private void parseWindChill(JsonParser parser, HourlyForecast.HourlyForecastBuilder builder) throws IOException {
+        JsonToken t;
+        while( ( t = parser.nextToken() ) != JsonToken.END_OBJECT ) {
+            if ( t != JsonToken.FIELD_NAME ) continue;
+            String name = parser.getCurrentName();
+            parser.nextToken();
+            if ( name.equals("english") ) {
+                builder.setWindChillEnglish(parser.getValueAsInt());
+            }
+            else if ( name.equals("metric" ) ) {
+                builder.setWindChillMetric(parser.getValueAsInt());
+            }
+        }
+    }
+
+    private void parseHeatIndex(JsonParser parser, HourlyForecast.HourlyForecastBuilder builder) throws IOException {
+        JsonToken t;
+        while( ( t = parser.nextToken() ) != JsonToken.END_OBJECT ) {
+            if ( t != JsonToken.FIELD_NAME ) continue;
+            String name = parser.getCurrentName();
+            parser.nextToken();
+            if ( name.equals("english") ) {
+                builder.setHeatIndexEnglish(parser.getValueAsInt());
+            }
+            else if ( name.equals("metric" ) ) {
+                builder.setHeatIndexMetric(parser.getValueAsInt());
+            }
+        }
+    }
+
+    private void parseQpf(JsonParser parser, HourlyForecast.HourlyForecastBuilder builder) throws IOException {
+        JsonToken t;
+        while( ( t = parser.nextToken() ) != JsonToken.END_OBJECT ) {
+            if ( t != JsonToken.FIELD_NAME ) continue;
+            String name = parser.getCurrentName();
+            parser.nextToken();
+            if ( name.equals("english") ) {
+                builder.setQpfEnglish(parser.getValueAsDouble());
+            }
+            else if ( name.equals("metric" ) ) {
+                builder.setQpfMetric(parser.getValueAsInt());
+            }
+        }
+    }
+
+    private void parseSnow(JsonParser parser, HourlyForecast.HourlyForecastBuilder builder) throws IOException {
+        JsonToken t;
+        while( ( t = parser.nextToken() ) != JsonToken.END_OBJECT ) {
+            if ( t != JsonToken.FIELD_NAME ) continue;
+            String name = parser.getCurrentName();
+            parser.nextToken();
+            if ( name.equals("english") ) {
+                builder.setSnowEnglish(parser.getValueAsDouble());
+            }
+            else if ( name.equals("metric" ) ) {
+                builder.setSnowMetric(parser.getValueAsInt());
+            }
+        }
+    }
+
+    private void parseMslp(JsonParser parser, HourlyForecast.HourlyForecastBuilder builder) throws IOException {
+        JsonToken t;
+        while( ( t = parser.nextToken() ) != JsonToken.END_OBJECT ) {
+            if ( t != JsonToken.FIELD_NAME ) continue;
+            String name = parser.getCurrentName();
+            parser.nextToken();
+            if ( name.equals("english") ) {
+                builder.setMslpEnglish(parser.getValueAsDouble());
+            }
+            else if ( name.equals("metric" ) ) {
+                builder.setMslpMetric(parser.getValueAsInt());
+            }
+        }
+    }
+
+    private void parseWindDir(JsonParser parser, HourlyForecast.HourlyForecastBuilder builder) throws IOException {
+        JsonToken t;
+        while( ( t = parser.nextToken() ) != JsonToken.END_OBJECT ) {
+            if ( t != JsonToken.FIELD_NAME ) continue;
+            String name = parser.getCurrentName();
+            parser.nextToken();
+            if ( name.equals("dir") ) {
+                builder.setWindDirection(parser.getText());
+            }
+            else if ( name.equals("degrees" ) ) {
+                builder.setWindDegrees(parser.getValueAsInt());
             }
         }
     }

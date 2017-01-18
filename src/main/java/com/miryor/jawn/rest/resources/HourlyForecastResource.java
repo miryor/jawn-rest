@@ -39,7 +39,7 @@ public class HourlyForecastResource {
     @GET
     @Timed
     public List<HourlyForecast> hourlyForecast(
-        @QueryParam("zipCode") Optional<String> zipCode,
+        @QueryParam("location") Optional<String> location,
         @QueryParam("version") Optional<String> version
         ) {
         WeatherJsonParser parser = new WundergroundWeatherJsonParser(WUNDERGROUND_JSON);
