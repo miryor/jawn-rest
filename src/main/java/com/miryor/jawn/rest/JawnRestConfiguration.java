@@ -2,7 +2,9 @@ package com.miryor.jawn.rest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
-import org.hibernate.validator.constraints.NotEmpty;
+import io.dropwizard.client.HttpClientConfiguration;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -10,30 +12,17 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 public class JawnRestConfiguration extends Configuration {
     
-    @NotEmpty
-    private String template;
+    @Valid
+    @NotNull
+    private HttpClientConfiguration httpClient = new HttpClientConfiguration();
     
-    @NotEmpty
-    private String defaultName = "Stranger";
-    
-    @JsonProperty
-    public String getTemplate() {
-        return template;
+    @JsonProperty("httpClient")
+    public HttpClientConfiguration getHttpClientConfiguration() {
+        return httpClient;
     }
-    
-    @JsonProperty
-    public void setTemplate(String template) {
-        this.template = template;
+
+    @JsonProperty("httpClient")
+    public void setHttpClientConfiguration(HttpClientConfiguration httpClient) {
+        this.httpClient = httpClient;
     }
-    
-    @JsonProperty
-    public String getDefaultName() {
-        return defaultName;
-    }
-    
-    @JsonProperty
-    public void setDefaultName(String defaultName) {
-        this.defaultName = defaultName;
-    }
-    
 }

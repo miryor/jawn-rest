@@ -18,6 +18,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import org.apache.http.client.HttpClient;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory; 
@@ -32,8 +33,10 @@ import org.slf4j.LoggerFactory;
 public class HourlyForecastResource {
     private final Logger logger = LoggerFactory.getLogger(HourlyForecastResource.class);
     
-    public HourlyForecastResource() {
-        
+    private HttpClient httpClient;
+    
+    public HourlyForecastResource(HttpClient httpClient) {
+        this.httpClient = httpClient;
     }
     
     @GET

@@ -1,11 +1,12 @@
 package com.miryor.jawn.rest;
 
-import com.miryor.jawn.rest.health.TemplateHealthCheck;
-import com.miryor.jawn.rest.resources.HelloWorldResource;
 import com.miryor.jawn.rest.resources.HourlyForecastResource;
 import io.dropwizard.Application;
+import io.dropwizard.client.HttpClientBuilder;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.apache.http.client.HttpClient;
+import static org.eclipse.jetty.util.log.JettyLogHandler.config;
 
 /**
  *
@@ -28,15 +29,11 @@ public class JawnRestApplication extends Application<JawnRestConfiguration> {
     
     @Override
     public void run(JawnRestConfiguration configuration, Environment environment) {
-        final HelloWorldResource resource = new HelloWorldResource(
-            configuration.getTemplate(), 
-            configuration.getDefaultName()
-        );
-        environment.jersey().register(resource);
-        environment.jersey().register( new HourlyForecastResource() );
-        final TemplateHealthCheck healthCheck = 
-            new TemplateHealthCheck(configuration.getTemplate());
-        environment.healthChecks().register("template", healthCheck);
+
+        final HttpClient httpClient = new HttpClientBuilder(environment)
+            .using(configuration.getHttpClientConfiguration())
+            .build(getName());
+        environment.jersey().register( new HourlyForecastResource( httpClient ) );
     }
     
 }
