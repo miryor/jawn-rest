@@ -5,8 +5,7 @@ import io.dropwizard.Application;
 import io.dropwizard.client.HttpClientBuilder;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import org.apache.http.client.HttpClient;
-import static org.eclipse.jetty.util.log.JettyLogHandler.config;
+import org.apache.http.impl.client.CloseableHttpClient;
 
 /**
  *
@@ -30,7 +29,7 @@ public class JawnRestApplication extends Application<JawnRestConfiguration> {
     @Override
     public void run(JawnRestConfiguration configuration, Environment environment) {
 
-        final HttpClient httpClient = new HttpClientBuilder(environment)
+        final CloseableHttpClient httpClient = new HttpClientBuilder(environment)
             .using(configuration.getHttpClientConfiguration())
             .build(getName());
         environment.jersey().register( new HourlyForecastResource( httpClient ) );
