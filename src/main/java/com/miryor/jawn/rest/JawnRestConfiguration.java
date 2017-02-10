@@ -11,6 +11,11 @@ import javax.validation.constraints.NotNull;
  * @author royrim
  */
 public class JawnRestConfiguration extends Configuration {
+    @JsonProperty("googleClientId")
+    private String googleClientId;    
+    public String getGoogleClientId() {
+        return googleClientId;
+    }
     
     @Valid
     @NotNull

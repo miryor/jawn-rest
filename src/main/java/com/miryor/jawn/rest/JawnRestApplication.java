@@ -32,7 +32,7 @@ public class JawnRestApplication extends Application<JawnRestConfiguration> {
         final CloseableHttpClient httpClient = new HttpClientBuilder(environment)
             .using(configuration.getHttpClientConfiguration())
             .build(getName());
-        environment.jersey().register( new HourlyForecastResource( httpClient ) );
+        environment.jersey().register( new HourlyForecastResource( httpClient, configuration.getGoogleClientId() ) );
     }
     
 }
