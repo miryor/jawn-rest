@@ -1,4 +1,6 @@
 googleClientId: ""
+wundergroundApiKey: ""
+wundergroundHourlyForecastResource: "http://api.wunderground.com/api/%s/hourly/q/%s.json"
 # Database settings.
 #database:
 

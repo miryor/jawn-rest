@@ -16,6 +16,18 @@ public class JawnRestConfiguration extends Configuration {
     public String getGoogleClientId() {
         return googleClientId;
     }
+
+    @JsonProperty("wundergroundHourlyForecastResource")
+    private String wundergroundHourlyForecastResource;    
+    public String getWundergroundHourlyForecastResource() {
+        return wundergroundHourlyForecastResource;
+    }
+
+    @JsonProperty("wundergroundApiKey")
+    private String wundergroundApiKey;    
+    public String getWundergroundApiKey() {
+        return wundergroundApiKey;
+    }
     
     @Valid
     @NotNull

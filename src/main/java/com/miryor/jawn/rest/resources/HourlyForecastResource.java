@@ -46,15 +46,22 @@ import org.slf4j.LoggerFactory;
 @Produces(MediaType.APPLICATION_JSON)
 public class HourlyForecastResource {
     private final Logger logger = LoggerFactory.getLogger(HourlyForecastResource.class);
-    private static final String WUNDERGROUND_HOURLY_URL = "http://api.wunderground.com/api/502f7c0bd4a4257d/hourly/q/";
-    private static final String JSON_FORMAT = ".json";
-    private CloseableHttpClient httpClient;
-    
+
+    private CloseableHttpClient httpClient;    
     private String googleClientId;
+    private String wundergroundHourlyForecastResource;
+    private String wundergroundApiKey;
     
-    public HourlyForecastResource(CloseableHttpClient httpClient, String googleClientId) {
+    public HourlyForecastResource(
+        CloseableHttpClient httpClient, 
+        String googleClientId, 
+        String wundergroundApiKey,
+        String wundergroundHourlyForecastResource
+    ) {
         this.httpClient = httpClient;
         this.googleClientId = googleClientId;
+        this.wundergroundApiKey = wundergroundApiKey;
+        this.wundergroundHourlyForecastResource = wundergroundHourlyForecastResource;
     }
     
     @GET
@@ -96,7 +103,7 @@ public class HourlyForecastResource {
                 throw new WebApplicationException( "Could not authenticate your token", 403 );
             } 
             
-            HttpGet httpGet = new HttpGet(WUNDERGROUND_HOURLY_URL + location.get() + JSON_FORMAT);
+            HttpGet httpGet = new HttpGet( String.format(wundergroundHourlyForecastResource, wundergroundApiKey, location.get()) );
             response = httpClient.execute(httpGet);
             if ( response.getStatusLine().getStatusCode() == HttpStatus.OK_200 ) {
                 HttpEntity entity = response.getEntity();

@@ -1,5 +1,6 @@
 package com.miryor.jawn.rest;
 
+import com.miryor.jawn.rest.health.WundergroundAPIHealthCheck;
 import com.miryor.jawn.rest.resources.HourlyForecastResource;
 import io.dropwizard.Application;
 import io.dropwizard.client.HttpClientBuilder;
@@ -32,7 +33,22 @@ public class JawnRestApplication extends Application<JawnRestConfiguration> {
         final CloseableHttpClient httpClient = new HttpClientBuilder(environment)
             .using(configuration.getHttpClientConfiguration())
             .build(getName());
-        environment.jersey().register( new HourlyForecastResource( httpClient, configuration.getGoogleClientId() ) );
+        
+        environment.healthChecks().register("wunderground", 
+            new WundergroundAPIHealthCheck(
+                httpClient, 
+                configuration.getWundergroundApiKey(),
+                configuration.getWundergroundHourlyForecastResource()
+            ));
+        
+        
+        environment.jersey().register( 
+            new HourlyForecastResource( 
+                httpClient, 
+                configuration.getGoogleClientId(),
+                configuration.getWundergroundApiKey(),
+                configuration.getWundergroundHourlyForecastResource()
+            ) );
     }
     
 }
