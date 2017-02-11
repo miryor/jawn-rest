@@ -5,6 +5,8 @@
  */
 package com.miryor.jawn.rest.resources;
 
+import com.codahale.metrics.annotation.ExceptionMetered;
+import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
@@ -66,6 +68,8 @@ public class HourlyForecastResource {
     
     @GET
     @Timed
+    @Metered
+    @ExceptionMetered
     public List<HourlyForecast> hourlyForecast(
         @QueryParam("token") Optional<String> token,
         @QueryParam("location") Optional<String> location,
