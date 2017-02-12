@@ -67,9 +67,9 @@ public class HourlyForecastResource {
     }
     
     @GET
-    @Timed
-    @Metered
-    @ExceptionMetered
+    @Timed(name="showAll-timed")
+    @Metered(name="showAll-metered")
+    @ExceptionMetered(name="showAll-exceptionmetered")
     public List<HourlyForecast> hourlyForecast(
         @QueryParam("token") Optional<String> token,
         @QueryParam("location") Optional<String> location,
