@@ -40,14 +40,14 @@ server:
 #      port: 8081
 
 httpClient:
-  timeout: 500ms
-  connectionTimeout: 500ms
+  timeout: 10000ms
+  connectionTimeout: 30000ms
   timeToLive: 1h
   cookiesEnabled: false
   maxConnections: 1024
   maxConnectionsPerRoute: 1024
   keepAlive: 0ms
-  retries: 0
+  retries: 3
 
 # Logging settings.
 logging:

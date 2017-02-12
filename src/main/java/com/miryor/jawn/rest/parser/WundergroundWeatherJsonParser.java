@@ -64,6 +64,15 @@ public class WundergroundWeatherJsonParser implements WeatherJsonParser {
                             throw new IOException( "Was expecting START_ARRAY got " + t );
                         }
                     }
+                    else if (name.equals("response")) {
+                        t = parser.nextToken();
+                        if ( t == JsonToken.START_OBJECT ) {
+                            parseResponse(parser);
+                        }
+                        else {
+                            throw new IOException( "Was expecting START_OBJECT got " + t );
+                        }
+                    }
                 }
             }
             if ( logger.isDebugEnabled() ) logger.debug( "done" );
@@ -73,6 +82,47 @@ public class WundergroundWeatherJsonParser implements WeatherJsonParser {
         }
 
         return list;
+    }
+
+    private void parseResponse(JsonParser parser) throws IOException {
+        JsonToken t;
+        while( ( t = parser.nextToken() ) != JsonToken.END_OBJECT ) {
+            if ( t != JsonToken.FIELD_NAME ) continue;
+            String name = parser.getCurrentName();
+            if ( name.equals("features") ) {
+                t = parser.nextToken();
+                if ( t == JsonToken.START_OBJECT ) {
+                    while( ( t = parser.nextToken() ) != JsonToken.END_OBJECT ) {}
+                }
+                else {
+                    throw new IOException( "Was expecting START_OBJECT got " + t );
+                }
+            }
+            else if ( name.equals("error" ) ) {
+                String type = null;
+                String description = null;
+                t = parser.nextToken();
+                if ( t == JsonToken.START_OBJECT ) {
+                    while( ( t = parser.nextToken() ) != JsonToken.END_OBJECT ) {
+                        if ( t != JsonToken.FIELD_NAME ) continue;
+                        name = parser.getCurrentName();
+                        parser.nextToken();
+                        if ( name.equals( "type" ) ) {
+                            type = parser.getText();
+                        }
+                        else if ( name.equals( "description" ) ) {
+                            description = parser.getText();
+                        }
+                    }
+                    if ( type != null ) {
+                        throw new IOException( type + ": " + description );
+                    }
+                }
+                else {
+                    throw new IOException( "Was expecting START_OBJECT got " + t );
+                }
+            }
+        }
     }
 
     private HourlyForecast parseHourlyForecast(JsonParser parser) throws IOException {
