@@ -29,6 +29,13 @@ import javax.validation.constraints.NotNull;
  * @author royrim
  */
 public class JawnRestConfiguration extends Configuration {
+    
+    @JsonProperty("mongoUrl")
+    private String mongoUrl;
+    public String getMongoUrl() {
+        return mongoUrl;
+    }
+    
     @JsonProperty("googleClientId")
     private String googleClientId;    
     public String getGoogleClientId() {

@@ -20,19 +20,32 @@ package com.miryor.jawn.rest.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
+import java.util.Objects;
+import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Field;
+import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Index;
+import org.mongodb.morphia.annotations.Indexes;
 
 /**
  *
  * @author royrim
  */
-public class HourlyForecastRequest {
+@Entity("TokenForecastRequest")
+@Indexes(
+    @Index(value = "ip", fields = @Field("ip"))
+)
+public class TokenForecastRequest {
     
+    @Id
+    private ObjectId id;
     String token;
     String location;
     String ip;
     Date requestDate;
 
-    public HourlyForecastRequest(String token, String location, String ip, Date requestDate) {
+    public TokenForecastRequest(String token, String location, String ip, Date requestDate) {
         this.token = token;
         this.location = location;
         this.ip = ip;
@@ -73,6 +86,43 @@ public class HourlyForecastRequest {
 
     public void setRequestDate(Date requestDate) {
         this.requestDate = requestDate;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 47 * hash + Objects.hashCode(this.token);
+        hash = 47 * hash + Objects.hashCode(this.location);
+        hash = 47 * hash + Objects.hashCode(this.ip);
+        hash = 47 * hash + Objects.hashCode(this.requestDate);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final TokenForecastRequest other = (TokenForecastRequest) obj;
+        if (!Objects.equals(this.token, other.token)) {
+            return false;
+        }
+        if (!Objects.equals(this.location, other.location)) {
+            return false;
+        }
+        if (!Objects.equals(this.ip, other.ip)) {
+            return false;
+        }
+        if (!Objects.equals(this.requestDate, other.requestDate)) {
+            return false;
+        }
+        return true;
     }
     
     

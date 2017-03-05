@@ -18,19 +18,35 @@
  */
 package com.miryor.jawn.rest;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.miryor.jawn.rest.api.HourlyForecast;
+import com.miryor.jawn.rest.api.TokenForecastRequest;
 import com.miryor.jawn.rest.health.WundergroundAPIHealthCheck;
 import com.miryor.jawn.rest.resources.HourlyForecastResource;
+import com.mongodb.MongoClient;
 import io.dropwizard.Application;
 import io.dropwizard.client.HttpClientBuilder;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Morphia;
 
 /**
  *
  * @author royrim
  */
 public class JawnRestApplication extends Application<JawnRestConfiguration> {
+    Cache<String, List<HourlyForecast>> hourlyForecastCache = CacheBuilder.newBuilder()
+       .maximumSize(100)
+       .expireAfterWrite(10, TimeUnit.MINUTES)
+       .build();
+    LinkedBlockingQueue<TokenForecastRequest> requestList = new LinkedBlockingQueue<TokenForecastRequest>();
+    
     public static void main(String[] args) throws Exception {
         new JawnRestApplication().run(args);
     }
@@ -47,7 +63,11 @@ public class JawnRestApplication extends Application<JawnRestConfiguration> {
     
     @Override
     public void run(JawnRestConfiguration configuration, Environment environment) {
-
+        final Morphia morphia = new Morphia();
+        morphia.mapPackage("com.miryor.jawn.rest.api");
+        final Datastore datastore = morphia.createDatastore(new MongoClient(configuration.getMongoUrl()), "jawn");
+        datastore.ensureIndexes();
+        
         final CloseableHttpClient httpClient = new HttpClientBuilder(environment)
             .using(configuration.getHttpClientConfiguration())
             .build(getName());
@@ -65,7 +85,9 @@ public class JawnRestApplication extends Application<JawnRestConfiguration> {
                 httpClient, 
                 configuration.getGoogleClientId(),
                 configuration.getWundergroundApiKey(),
-                configuration.getWundergroundHourlyForecastResource()
+                configuration.getWundergroundHourlyForecastResource(),
+                hourlyForecastCache,
+                datastore
             ) );
     }
     

@@ -46,12 +46,15 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.miryor.jawn.rest.api.HourlyForecastRequest;
+import com.miryor.jawn.rest.api.TokenForecastRequest;
+import com.miryor.jawn.rest.api.UserForecastRequest;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
-import java.util.concurrent.TimeUnit;
+import java.util.Date;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Context;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.mongodb.morphia.Datastore;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory; 
@@ -71,21 +74,23 @@ public class HourlyForecastResource {
     private String wundergroundHourlyForecastResource;
     private String wundergroundApiKey;
     
-    Cache<String, List<HourlyForecast>> hourlyForecastCache = CacheBuilder.newBuilder()
-       .maximumSize(100)
-       .expireAfterWrite(10, TimeUnit.MINUTES)
-       .build();
+    private Cache<String, List<HourlyForecast>> hourlyForecastCache;
+    private Datastore datastore;
     
     public HourlyForecastResource(
         CloseableHttpClient httpClient, 
         String googleClientId, 
         String wundergroundApiKey,
-        String wundergroundHourlyForecastResource
+        String wundergroundHourlyForecastResource,
+        Cache<String, List<HourlyForecast>> hourlyForecastCache,
+        Datastore datastore
     ) {
         this.httpClient = httpClient;
         this.googleClientId = googleClientId;
         this.wundergroundApiKey = wundergroundApiKey;
         this.wundergroundHourlyForecastResource = wundergroundHourlyForecastResource;
+        this.hourlyForecastCache = hourlyForecastCache;
+        this.datastore = datastore;
     }
     
     @GET
@@ -95,8 +100,11 @@ public class HourlyForecastResource {
     public List<HourlyForecast> hourlyForecast(
         @QueryParam("token") @NotEmpty String token,
         @QueryParam("location") @NotEmpty String location,
-        @QueryParam("version") @NotEmpty String version
+        @QueryParam("version") @NotEmpty String version,
+        @Context HttpServletRequest request
         ) {
+        
+        datastore.save(new TokenForecastRequest(token, location, request.getRemoteAddr(), new Date()) );
         
         CloseableHttpResponse response = null;
         InputStream in = null;
@@ -114,10 +122,11 @@ public class HourlyForecastResource {
 
               // Print user identifier
               String userId = payload.getSubject();
+              String email = payload.getEmail();
               logger.debug("User ID: " + userId);
 
               // Get profile information from payload
-              /*String email = payload.getEmail();
+              /*
               boolean emailVerified = Boolean.valueOf(payload.getEmailVerified());
               String name = (String) payload.get("name");
               String pictureUrl = (String) payload.get("picture");
@@ -125,11 +134,16 @@ public class HourlyForecastResource {
               String familyName = (String) payload.get("family_name");
               String givenName = (String) payload.get("given_name");*/
               
+              datastore.save(new UserForecastRequest(email, location, request.getRemoteAddr(), new Date()) );
+              
+              
             } else {
                 throw new WebApplicationException( "Could not authenticate your token", 403 );
             } 
             
             list = hourlyForecastCache.getIfPresent(location);
+            
+            if ( list != null ) logger.debug( "Forecast for " + location + " found in cache" );
 
             if ( list == null ) {
                 HttpGet httpGet = new HttpGet( String.format(wundergroundHourlyForecastResource, wundergroundApiKey, location) );
