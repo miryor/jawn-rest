@@ -22,6 +22,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.miryor.jawn.rest.api.HourlyForecast;
 import com.miryor.jawn.rest.api.TokenForecastRequest;
+import com.miryor.jawn.rest.health.MongoDbHealthCheck;
 import com.miryor.jawn.rest.health.WundergroundAPIHealthCheck;
 import com.miryor.jawn.rest.resources.HourlyForecastResource;
 import com.mongodb.MongoClient;
@@ -77,6 +78,11 @@ public class JawnRestApplication extends Application<JawnRestConfiguration> {
                 httpClient, 
                 configuration.getWundergroundApiKey(),
                 configuration.getWundergroundHourlyForecastResource()
+            ));
+        
+        environment.healthChecks().register("mongodb", 
+            new MongoDbHealthCheck(
+                datastore
             ));
         
         
