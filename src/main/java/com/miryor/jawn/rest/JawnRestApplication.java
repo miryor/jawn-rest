@@ -26,6 +26,7 @@ import com.miryor.jawn.rest.health.MongoDbHealthCheck;
 import com.miryor.jawn.rest.health.WundergroundAPIHealthCheck;
 import com.miryor.jawn.rest.resources.HourlyForecastResource;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 import io.dropwizard.Application;
 import io.dropwizard.client.HttpClientBuilder;
 import io.dropwizard.setup.Bootstrap;
@@ -66,7 +67,11 @@ public class JawnRestApplication extends Application<JawnRestConfiguration> {
     public void run(JawnRestConfiguration configuration, Environment environment) {
         final Morphia morphia = new Morphia();
         morphia.mapPackage("com.miryor.jawn.rest.api");
-        final Datastore datastore = morphia.createDatastore(new MongoClient(configuration.getMongoUrl()), "jawn");
+        final Datastore datastore = morphia.createDatastore(
+            new MongoClient(
+                new MongoClientURI(configuration.getMongoUrl())
+            ), 
+            "jawn");
         datastore.ensureIndexes();
         
         final CloseableHttpClient httpClient = new HttpClientBuilder(environment)
