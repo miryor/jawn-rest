@@ -19,12 +19,16 @@
 package com.miryor.jawn.rest.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Date;
+import java.util.Objects;
 
 /**
  * Created by royrim on 11/20/16.
  */
 
 public class HourlyForecast {
+    
+    private String location;
 
     private int hour;
     private String hourPadded;
@@ -63,7 +67,16 @@ public class HourlyForecast {
     private int pop;
     private double mslpEnglish;
     private int mslpMetric;
-
+    
+    @JsonProperty
+    public String getLocation() {
+        return location;
+    }
+    
+    public void setLocation(String location) {
+        this.location = location;
+    }
+    
     @JsonProperty
     public long getEpoch() {
         return epoch;
@@ -392,6 +405,7 @@ public class HourlyForecast {
     }
 
     public HourlyForecast(HourlyForecastBuilder b) {
+        location = b.location;
         hour = b.hour;
         hourPadded = b.hourPadded;
         min = b.min;
@@ -434,10 +448,52 @@ public class HourlyForecast {
 
     @Override
     public String toString() {
-        return monthPadded + "/" + dayPadded + " " + tempF;
+        return location + "/" + monthPadded + "/" + dayPadded + " " + tempF;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 17 * hash + Objects.hashCode(this.location);
+        hash = 17 * hash + this.hour;
+        hash = 17 * hash + this.year;
+        hash = 17 * hash + this.month;
+        hash = 17 * hash + this.day;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final HourlyForecast other = (HourlyForecast) obj;
+        if (this.hour != other.hour) {
+            return false;
+        }
+        if (this.year != other.year) {
+            return false;
+        }
+        if (this.month != other.month) {
+            return false;
+        }
+        if (this.day != other.day) {
+            return false;
+        }
+        if (!Objects.equals(this.location, other.location)) {
+            return false;
+        }
+        return true;
     }
 
     public static class HourlyForecastBuilder {
+        private String location;
         private int hour;
         private String hourPadded;
         private int min;
@@ -475,6 +531,10 @@ public class HourlyForecast {
         private int pop;
         private double mslpEnglish;
         private int mslpMetric;   
+        
+        public void setLocation(String location) {
+            this.location = location;
+        }
         
         public long getEpoch() {
             return epoch;

@@ -60,7 +60,7 @@ public class WundergroundAPIHealthCheck extends HealthCheck {
         if ( response.getStatusLine().getStatusCode() == HttpStatus.OK_200 ) {
             HttpEntity entity = response.getEntity();
             in = entity.getContent();
-            WeatherJsonParser parser = new WundergroundWeatherJsonParser(in);
+            WeatherJsonParser parser = new WundergroundWeatherJsonParser("11233", in);
             list = parser.parseHourlyForecast();
             in.close();
             in = null;

@@ -29,7 +29,6 @@ import com.miryor.jawn.rest.parser.WundergroundWeatherJsonParser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import java.util.Optional;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -46,8 +45,13 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.miryor.jawn.rest.api.HourlyForecastRequest;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
+import java.util.concurrent.TimeUnit;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory; 
@@ -67,6 +71,11 @@ public class HourlyForecastResource {
     private String wundergroundHourlyForecastResource;
     private String wundergroundApiKey;
     
+    Cache<String, List<HourlyForecast>> hourlyForecastCache = CacheBuilder.newBuilder()
+       .maximumSize(100)
+       .expireAfterWrite(10, TimeUnit.MINUTES)
+       .build();
+    
     public HourlyForecastResource(
         CloseableHttpClient httpClient, 
         String googleClientId, 
@@ -84,9 +93,9 @@ public class HourlyForecastResource {
     @Metered(name="showAll-metered")
     @ExceptionMetered(name="showAll-exceptionmetered")
     public List<HourlyForecast> hourlyForecast(
-        @QueryParam("token") Optional<String> token,
-        @QueryParam("location") Optional<String> location,
-        @QueryParam("version") Optional<String> version
+        @QueryParam("token") @NotEmpty String token,
+        @QueryParam("location") @NotEmpty String location,
+        @QueryParam("version") @NotEmpty String version
         ) {
         
         CloseableHttpResponse response = null;
@@ -99,7 +108,7 @@ public class HourlyForecastResource {
                 .setAudience(Collections.singletonList(googleClientId))
                 .build();
             
-            GoogleIdToken idToken = verifier.verify(token.get());
+            GoogleIdToken idToken = verifier.verify(token);
             if (idToken != null) {
               Payload payload = idToken.getPayload();
 
@@ -120,19 +129,24 @@ public class HourlyForecastResource {
                 throw new WebApplicationException( "Could not authenticate your token", 403 );
             } 
             
-            HttpGet httpGet = new HttpGet( String.format(wundergroundHourlyForecastResource, wundergroundApiKey, location.get()) );
-            response = httpClient.execute(httpGet);
-            if ( response.getStatusLine().getStatusCode() == HttpStatus.OK_200 ) {
-                HttpEntity entity = response.getEntity();
-                in = entity.getContent();
-                WeatherJsonParser parser = new WundergroundWeatherJsonParser(in);
-                list = parser.parseHourlyForecast();
-                in.close();
-                in = null;
-             }
-            else {
-                if ( logger.isErrorEnabled() ) logger.error( "Error getting hourly forecast, got status " + response.getStatusLine().getStatusCode() );
-                throw new WebApplicationException( "Error getting hourly forecast", response.getStatusLine().getStatusCode() );
+            list = hourlyForecastCache.getIfPresent(location);
+
+            if ( list == null ) {
+                HttpGet httpGet = new HttpGet( String.format(wundergroundHourlyForecastResource, wundergroundApiKey, location) );
+                response = httpClient.execute(httpGet);
+                if ( response.getStatusLine().getStatusCode() == HttpStatus.OK_200 ) {
+                    HttpEntity entity = response.getEntity();
+                    in = entity.getContent();
+                    WeatherJsonParser parser = new WundergroundWeatherJsonParser(location, in);
+                    list = parser.parseHourlyForecast();
+                    in.close();
+                    in = null;
+                    hourlyForecastCache.put(location,list);
+                 }
+                else {
+                    if ( logger.isErrorEnabled() ) logger.error( "Error getting hourly forecast, got status " + response.getStatusLine().getStatusCode() );
+                    throw new WebApplicationException( "Error getting hourly forecast", response.getStatusLine().getStatusCode() );
+                }
             }
         }
         catch ( GeneralSecurityException e ) {

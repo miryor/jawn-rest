@@ -57,7 +57,7 @@ public class WeatherJsonParserTest {
 
     @Test
     public void testWunderground() throws Exception {
-        WeatherJsonParser parser = new WundergroundWeatherJsonParser(WUNDERGROUND_JSON);
+        WeatherJsonParser parser = new WundergroundWeatherJsonParser("11233", WUNDERGROUND_JSON);
         List<HourlyForecast> list = parser.parseHourlyForecast();
         assertEquals( 36, list.size() );
         
@@ -109,7 +109,7 @@ public class WeatherJsonParserTest {
     @Test
     public void testWundergroundBadLocation() throws Exception {
         try {
-            WeatherJsonParser parser = new WundergroundWeatherJsonParser(WUNDERGROUND_JSON_BADLOCATION);
+            WeatherJsonParser parser = new WundergroundWeatherJsonParser("00000", WUNDERGROUND_JSON_BADLOCATION);
             List<HourlyForecast> list = parser.parseHourlyForecast();
             fail( "Should have thrown exception" );
         }

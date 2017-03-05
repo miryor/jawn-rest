@@ -41,8 +41,10 @@ import org.slf4j.LoggerFactory;
 public class WundergroundWeatherJsonParser implements WeatherJsonParser {
     private final Logger logger = LoggerFactory.getLogger(WundergroundWeatherJsonParser.class);
     
+    private String location;
     private InputStream inputStream;
-    public WundergroundWeatherJsonParser(String s) {
+    public WundergroundWeatherJsonParser(String location, String s) {
+        this.location = location;
         try {
             this.inputStream = new ByteArrayInputStream(s.getBytes("UTF-8"));
         }
@@ -51,7 +53,8 @@ public class WundergroundWeatherJsonParser implements WeatherJsonParser {
             logger.error( "This shouldn't happen", e );
         }
     }
-    public WundergroundWeatherJsonParser(InputStream inputStream) {
+    public WundergroundWeatherJsonParser(String location, InputStream inputStream) {
+        this.location = location;
         this.inputStream = inputStream;
     }
     public List<HourlyForecast> parseHourlyForecast() throws IOException {
@@ -140,6 +143,7 @@ public class WundergroundWeatherJsonParser implements WeatherJsonParser {
 
     private HourlyForecast parseHourlyForecast(JsonParser parser) throws IOException {
         HourlyForecast.HourlyForecastBuilder builder = new HourlyForecast.HourlyForecastBuilder();
+        builder.setLocation(location);
         JsonToken t;
         while( ( t = parser.nextToken() ) != JsonToken.END_OBJECT ) {
             if ( t == JsonToken.FIELD_NAME ) {
