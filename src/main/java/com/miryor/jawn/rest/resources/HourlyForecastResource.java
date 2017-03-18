@@ -29,7 +29,6 @@ import com.miryor.jawn.rest.parser.WundergroundWeatherJsonParser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
@@ -52,6 +51,7 @@ import java.util.Collections;
 import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.POST;
 import javax.ws.rs.core.Context;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.mongodb.morphia.Datastore;
@@ -93,7 +93,7 @@ public class HourlyForecastResource {
         this.datastore = datastore;
     }
     
-    @GET
+    @POST
     @Timed(name="showAll-timed")
     @Metered(name="showAll-metered")
     @ExceptionMetered(name="showAll-exceptionmetered")
