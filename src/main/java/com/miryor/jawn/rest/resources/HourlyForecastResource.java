@@ -32,7 +32,6 @@ import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import org.apache.http.HttpEntity;
@@ -52,6 +51,7 @@ import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.core.Context;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.mongodb.morphia.Datastore;
@@ -98,9 +98,9 @@ public class HourlyForecastResource {
     @Metered(name="showAll-metered")
     @ExceptionMetered(name="showAll-exceptionmetered")
     public List<HourlyForecast> hourlyForecast(
-        @QueryParam("token") @NotEmpty String token,
-        @QueryParam("location") @NotEmpty String location,
-        @QueryParam("version") @NotEmpty String version,
+        @FormParam("token") @NotEmpty String token,
+        @FormParam("location") @NotEmpty String location,
+        @FormParam("version") @NotEmpty String version,
         @Context HttpServletRequest request
         ) {
         
